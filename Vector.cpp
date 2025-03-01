@@ -1,70 +1,42 @@
-#include <vector>
-#include <iostream>
-#include <random>
+#include "Vector.h"
 
-using namespace std;
+Vector::Vector() : data_() {}
+Vector::Vector(size_t size) : data_(size, 0.0f) {};
+Vector::Vector(const std::vector<float>& data) : data_(data) {};
+Vector::Vector(const Vector& other) : data_(other.data_) {};
 
-class Vector {
-    private:
-        vector<float> data_;
-    public:
-        // Constructors
-        // default constructor
-        Vector() : data_() {}
+Vector& Vector::operator=(const Vector& other) {
+    if (this != &other) {
+        data_ = other.data_;
+    }
+    return *this;
+}
+float Vector::operator[](size_t index) { return data_[index]; }
 
-        // constructor with a size
-        Vector(size_t size) : data_(size, 0.0f) {};
-        // constructor with a vector
-        Vector(const vector<float>& data) : data_(data) {};
-        // copy constructor
-        Vector(const Vector& other) : data_(other.data_) {};
+const float Vector::operator[](size_t index) const { return data_[index]; }
 
-        // Assignment Operators
-        Vector& operator=(const Vector& other) {
-            if (this != &other) {
-                data_ = other.data_;
-            }
-            return *this;
-        }
+size_t Vector::size() const { return data_.size(); }
 
-        float& operator[](size_t index) {
-            return data_[index];
-        }
+Vector& Vector::operator+=(const Vector& other) {
+    if (other.size() != size()) { throw std::invalid_argument("Dimension mismatch"); }
+    for (size_t i=0; i<size(); ++i) { data_[i] += other.data_[i]; }
+    return *this;
+}
+Vector& Vector::hadamard(const Vector& other) {
+    if (other.size() != size()) { throw std::invalid_argument("Dimension mismatch"); }
+    for (size_t i=0; i<size(); ++i) { data_[i] *= other.data_[i]; }
+    return *this;
+}
 
-        const float& operator[](size_t index) const {
-            return data_[index];
-        }
-
-        size_t size() const {
-            return data_.size();
-        }
-
-        Vector& operator+=(const Vector& other) {
-            if (other.size() != size()) {
-                throw std::invalid_argument("Vector addition dimension mismatch");
-            }
-            for (size_t i = 0; i < size(); i++) data_[i] += other.data_[i];
-            return *this;
-        }
-
-        Vector& hadamard(const Vector& other) {
-            if (other.size() != size()) {
-                throw std::invalid_argument("Vector addition dimension mismatch");
-            }
-            for (size_t i = 0; i < size(); i++) data_[i] *= other.data_[i];
-            return *this;
-        }
-
-        /*
-        Vector intialization does not matter much, so we will just do uniform initialization
-        But typically he initialization is done for 
-        */
-       void uniform_init() {
-        random_device rd;
-        mt19937 gen(rd());
-        uniform_real_distribution<float> dis(-1.0, 1.0);
-        for (size_t i = 0; i < size(); i++) {
-            data_[i] = dis(gen);
-        }
-       }
-};
+/* 
+    Vector initializtion does not matter much, except in special cases
+    For now we will use uniform random initialization, later we can update.
+*/
+void Vector::uniform_init() {
+std::random_device rd;
+std::mt19937 gen(rd());
+std::uniform_real_distribution<float> dis(-1.0, 1.0);
+for (size_t i = 0; i < size(); i++) {
+    data_[i] = dis(gen);
+}
+}

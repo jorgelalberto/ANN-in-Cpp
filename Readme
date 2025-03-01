@@ -1,13 +1,29 @@
-Vector.cpp
+# History
+- Bjarne Stroustrup invented C++ in 1979 at Bell Labs (ppl who made the first transistor)
+- C++ stands for "C with classes"
+
+# General C++ Knowledge
+- Compiled language
+![alt text](./imgs/compiled_vs_interpreted.png)
+- Assignment Operator vs Copy Constructor
+    - assignment operator: takes in already initialized object
+    - copy constructor: takes in uninitialized object
+- Const specifications
+    - foo(const int x) {return x}: parameter passed in cannot be changed
+    - const foo(int x) {return x}: function can only be called on a constant object
+    - foo(int x) const {return x}: return type will be const int
+
+# Files
+## Vector.cpp
 - Vector not array becuse it stores elements contigously, ow array would have cache misses therefore less effcient
 - size_t is unsigned integer with no upper bound, size of it is determined by the maximum amount of memory that can be allocated in your system
 
-Matrix.cpp
+## Matrix.cpp
 - Matrix is a 2D array of vectors, so typically we use two vectors to represent a matrix, but this has bad cache performance
 - So we use a single vector to represent a matrix, and we use a function to access the elements of the matrix to allow for contigous memory access
 
-WeightMatrix.cpp
+## WeightMatrix.cpp
 - Has bias an weight matrix
 
-ActivationFunction.cpp
+## ActivationFunction.cpp
 - Need dynamic bidning, therefore need abstract classes and virtual functions
